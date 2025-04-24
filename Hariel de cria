@@ -1,0 +1,39 @@
+ Hariel hub-- Script Blox Fruits Multi-Funções (AutoFarm, Baús, Itens, Teleporte)
+-- Certifique-se de estar usando um executor confiável como Synapse X ou Fluxus
+
+local Player = game.Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+-- Função de teleporte
+function TeleportTo(position)
+    if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+        Player.Character.HumanoidRootPart.CFrame = CFrame.new(position)
+    end
+end
+
+-- Auto Farm 
+local autoFarm = true
+spawn(function()
+    while autoFarm do
+        pcall(function()
+            for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+                    repeat
+                        TeleportTo(mob.HumanoidRootPart.Position + Vector3.new(0, 5, 0))
+                        wait(0.2)
+                        -- ataque
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
+                    until mob.Humanoid.Health <= 0 or not autoFarm
+                end
+            end
+        end)
+        wait(1)
+    end
+end)
+
+-- Auto Farm Baús
+local autoChest = true
+spawn(function()
+    while autoChest do
+        for _, obj in pairs(game.Workspace:GetDescendants()) do
+            if obj.Name == "Chest" and obj:IsA("Model") then
